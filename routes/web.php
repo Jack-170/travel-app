@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TripController;
+use App\Http\Controllers\DayController;
+use App\Http\Controllers\StageController;
 use Illuminate\Support\Facades\Route;
 
 // Pagina home
@@ -31,6 +33,19 @@ Route::middleware('auth')->group(function () {
 
     // Eliminare un trip dal database (destroy)
     Route::delete('/trips/{trip}', [TripController::class, 'destroy'])->name('trips.destroy');
+
+    // Rotte per la visualizzazione dei giorni
+    Route::get('/days/{id}', [DayController::class, 'show'])->name('days.show');
+
+    // Rotte per le tappe
+    Route::prefix('stages')->group(function () {
+        Route::get('/create/{day}', [StageController::class, 'create'])->name('stages.create');
+        Route::post('/', [StageController::class, 'store'])->name('stages.store');
+        Route::get('/{stage}', [StageController::class, 'show'])->name('stages.show');
+        Route::get('/{stage}/edit', [StageController::class, 'edit'])->name('stages.edit');
+        Route::put('/{stage}', [StageController::class, 'update'])->name('stages.update');
+        Route::delete('/{stage}', [StageController::class, 'destroy'])->name('stages.destroy');
+    });
 });
 
 // Pagina dashboard

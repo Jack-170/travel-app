@@ -92,10 +92,15 @@ class TripController extends Controller
      * Display the specified resource.
      */
     public function show(string $id)
-    {
-        $trip = Trip::findOrFail($id);
-        return view('trips.show', compact('trip'));
-    }
+{
+    $trip = Trip::findOrFail($id);
+    $trip->load(['days' => function ($query) {
+        $query->orderBy('date'); // Ordina i giorni per data
+    }]);
+
+    return view('trips.show', compact('trip'));
+}
+
 
     /**
      * Show the form for editing the specified resource.
@@ -175,7 +180,7 @@ class TripController extends Controller
             }
         }
 
-        return redirect()->route('home');
+        return redirect()->route('trips.index');
     }
 
     /**
