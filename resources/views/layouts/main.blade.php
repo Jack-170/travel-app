@@ -31,7 +31,7 @@
             justify-content: center;
             align-items: center;
         }
-        /* Stile per posizionare il bottone del profilo in fondo a destra */
+
         .navbar-nav.ms-auto {
             margin-left: auto;
         }
@@ -49,13 +49,13 @@
                     <div class="collapse navbar-collapse" id="navbarNav">
                         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('home') }}">Home</a>
+                                <a class="nav-link fw-semibold custom-main-color" href="{{ route('home') }}">Home</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('trips.index') }}">Trips</a>
+                                <a class="nav-link fw-semibold custom-main-color" href="{{ route('trips.index') }}">Viaggi</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('trips.create') }}">Create Trip</a>
+                                <a class="nav-link fw-semibold custom-main-color" href="{{ route('trips.create') }}">Nuovo viaggio</a>
                             </li>
                         </ul>
                         <ul class="navbar-nav ms-auto"> <!-- Sposta il profilo a destra -->
@@ -103,6 +103,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="{{ mix('js/app.js') }}"></script>
 
     <!-- Sezione per gli script specifici delle viste -->
     @yield('scripts')

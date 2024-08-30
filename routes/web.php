@@ -14,7 +14,7 @@ Route::get('/', function () {
 // Rotte per i trips
 Route::middleware('auth')->group(function () {
     // Visualizzare la lista di tutti i trips (index)
-    Route::get('/trips/index', [TripController::class, 'index'])->name('trips.index');
+    Route::get('/Trips', [TripController::class, 'index'])->name('trips.index');
 
     // Visualizzare il form di creazione di un nuovo trip (create)
     Route::get('/trips/create', [TripController::class, 'create'])->name('trips.create');
@@ -26,7 +26,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/trips/{trip}', [TripController::class, 'show'])->name('trips.show');
 
     // Visualizzare il form di modifica di un trip esistente (edit)
-    Route::get('/trips/{trip}/edit', [TripController::class, 'edit'])->name('trips.edit');
+    Route::get('/trip/{trip}/edit', [TripController::class, 'edit'])->name('trips.edit');
 
     // Aggiornare un trip esistente nel database (update)
     Route::put('/trips/{trip}', [TripController::class, 'update'])->name('trips.update');
