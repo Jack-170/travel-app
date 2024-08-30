@@ -1,75 +1,39 @@
 @extends('layouts.main')
 
 @section('content')
-<div class="container">
-    <h1 class="mb-4">Aggiungi Nuova Tappa</h1>
+    <div class="container">
+        <h1>{{ $stage->title }}</h1>
 
-    <form method="POST" action="{{ route('stages.store') }}" enctype="multipart/form-data">
-        @csrf
-
-        <input type="hidden" name="day_id" value="{{ $day->id }}">
+        @if($stage->image)
+            <div class="mb-3">
+                <img src="{{ Storage::url($stage->image) }}" alt="{{ $stage->title }}" class="img-fluid">
+            </div>
+        @endif
 
         <div class="mb-3">
-            <label for="title" class="form-label">Titolo</label>
-            <input type="text" class="form-control @error('title') is-invalid @enderror" id="title" name="title" value="{{ old('title') }}" required>
-            @error('title')
-                <div class="invalid-feedback">
-                    {{ $message }}
-                </div>
-            @enderror
+            <h2>Descrizione</h2>
+            <p>{{ $stage->description }}</p>
         </div>
 
         <div class="mb-3">
-            <label for="location" class="form-label">Localizzazione</label>
-            <input type="text" class="form-control @error('location') is-invalid @enderror" id="location" name="location" value="{{ old('location') }}" required>
-            @error('location')
-                <div class="invalid-feedback">
-                    {{ $message }}
-                </div>
-            @enderror
+            <h2>Localizzazione</h2>
+            <p><strong></strong> {{ $stage->location}}</p>
         </div>
 
-        <div class="mb-3">
-            <label for="latitude" class="form-label">Latitudine</label>
-            <input type="text" class="form-control @error('latitude') is-invalid @enderror" id="latitude" name="latitude" value="{{ old('latitude') }}" required>
-            @error('latitude')
-                <div class="invalid-feedback">
-                    {{ $message }}
-                </div>
-            @enderror
-        </div>
+        <!-- Pulsante per tornare alla vista del giorno -->
+        <a href="{{ route('days.show', $stage->day_id) }}" class="btn btn-primary">Torna al giorno</a>
 
-        <div class="mb-3">
-            <label for="longitude" class="form-label">Longitudine</label>
-            <input type="text" class="form-control @error('longitude') is-invalid @enderror" id="longitude" name="longitude" value="{{ old('longitude') }}" required>
-            @error('longitude')
-                <div class="invalid-feedback">
-                    {{ $message }}
-                </div>
-            @enderror
-        </div>
+        <!-- Pulsante per tornare alla vista del viaggio -->
+        <a href="{{ route('trips.show', $stage->day->trip_id) }}" class="btn btn-primary">Torna al viaggio</a>
 
-        <div class="mb-3">
-            <label for="description" class="form-label">Descrizione</label>
-            <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description">{{ old('description') }}</textarea>
-            @error('description')
-                <div class="invalid-feedback">
-                    {{ $message }}
-                </div>
-            @enderror
-        </div>
+        <!-- Pulsante per modificare la tappa -->
+        <a href="{{ route('stages.edit', $stage->id) }}" class="btn btn-warning">Modifica Tappa</a>
 
-        <div class="mb-3">
-            <label for="image" class="form-label">Immagine</label>
-            <input type="file" class="form-control @error('image') is-invalid @enderror" id="image" name="image">
-            @error('image')
-                <div class="invalid-feedback">
-                    {{ $message }}
-                </div>
-            @enderror
-        </div>
-
-        <button type="submit" class="btn btn-primary">Salva Tappa</button>
-    </form>
-</div>
+        <!-- Pulsante per eliminare la tappa -->
+        <form action="{{ route('stages.destroy', $stage->id) }}" method="POST" class="mt-2">
+            @csrf
+            @method('DELETE')
+            <button type="submit" class="btn btn-danger">Elimina Tappa</button>
+        </form>
+    </div>
 @endsection

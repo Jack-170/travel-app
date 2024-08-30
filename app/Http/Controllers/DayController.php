@@ -14,6 +14,7 @@ class DayController extends Controller
     public function show($id): View
     {
         $day = Day::findOrFail($id);
+        $day->load('stages');
         return view('days.show', compact('day'));
     }
 }

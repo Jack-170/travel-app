@@ -1,5 +1,5 @@
 <x-guest-layout>
-    <!-- Session Status -->
+    <!-- Stato della sessione -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
     <div class="container mt-5">
@@ -7,12 +7,12 @@
             <div class="col-md-6 col-lg-4">
                 <div class="card shadow-sm border-light">
                     <div class="card-body p-4">
-                        <h2 class="card-title mb-4 text-center">Login</h2>
+                        <h2 class="card-title mb-4 text-center">Accesso</h2>
 
                         <form method="POST" action="{{ route('login') }}">
                             @csrf
 
-                            <!-- Email Address -->
+                            <!-- Indirizzo Email -->
                             <div class="mb-3">
                                 <x-input-label for="email" :value="__('Email')" />
                                 <x-text-input id="email" class="form-control" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
@@ -26,22 +26,27 @@
                                 <x-input-error :messages="$errors->get('password')" class="text-danger mt-2" />
                             </div>
 
-                            <!-- Remember Me -->
+                            <!-- Ricordami -->
                             <div class="form-check mb-3">
                                 <input id="remember_me" type="checkbox" class="form-check-input" name="remember">
-                                <label for="remember_me" class="form-check-label text-muted">{{ __('Remember me') }}</label>
+                                <label for="remember_me" class="form-check-label text-muted">{{ __('Ricordami') }}</label>
                             </div>
 
-                            <div class="d-flex justify-content-between">
+                            <!-- Pulsanti -->
+                            <div class="d-flex flex-column align-items-center">
+                                <x-primary-button class="btn custom-main-color btn-lg mb-3 w-75">
+                                    {{ __('Accedi') }}
+                                </x-primary-button>
+
                                 @if (Route::has('password.request'))
-                                    <a class="btn btn-link" href="{{ route('password.request') }}">
-                                        {{ __('Forgot your password?') }}
+                                    <a class="btn btn-link text-muted mb-3" href="{{ route('password.request') }}">
+                                        {{ __('Hai dimenticato la password?') }}
                                     </a>
                                 @endif
 
-                                <x-primary-button class="custom-main-color btn">
-                                    {{ __('Log in') }}
-                                </x-primary-button>
+                                <a href="{{ route('register') }}" class="btn custom-main-color  btn-lg w-75">
+                                    {{ __('Registrati') }}
+                                </a>
                             </div>
                         </form>
                     </div>

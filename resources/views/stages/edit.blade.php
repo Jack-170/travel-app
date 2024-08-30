@@ -2,18 +2,19 @@
 
 @section('content')
 <div class="container">
-    <h1 class="mb-4">Aggiungi Nuova Tappa</h1>
+    <h1 class="mb-4">Modifica Tappa</h1>
 
-    <form method="POST" action="{{ route('stages.store') }}" enctype="multipart/form-data">
+    <form method="POST" action="{{ route('stages.update', $stage->id) }}" enctype="multipart/form-data">
         @csrf
+        @method('PUT')
 
-        <input type="hidden" name="day_id" value="{{ $day->id }}">
-        <input type="hidden" id="latitude" name="latitude">
-        <input type="hidden" id="longitude" name="longitude">
+        <input type="hidden" name="day_id" value="{{ $stage->day_id }}">
+        <input type="hidden" id="latitude" name="latitude" value="{{ old('latitude', $stage->latitude) }}">
+        <input type="hidden" id="longitude" name="longitude" value="{{ old('longitude', $stage->longitude) }}">
 
         <div class="mb-3">
             <label for="title" class="form-label">Titolo</label>
-            <input type="text" class="form-control @error('title') is-invalid @enderror" id="title" name="title" value="{{ old('title') }}" required>
+            <input type="text" class="form-control @error('title') is-invalid @enderror" id="title" name="title" value="{{ old('title', $stage->title) }}" required>
             @error('title')
                 <div class="invalid-feedback">
                     {{ $message }}
@@ -23,7 +24,7 @@
 
         <div class="mb-3">
             <label for="location" class="form-label">Localizzazione</label>
-            <input type="text" class="form-control @error('location') is-invalid @enderror" id="location" name="location" value="{{ old('location') }}" required autocomplete="off">
+            <input type="text" class="form-control @error('location') is-invalid @enderror" id="location" name="location" value="{{ old('location', $stage->location) }}" required autocomplete="off">
             @error('location')
                 <div class="invalid-feedback">
                     {{ $message }}
@@ -32,12 +33,9 @@
             <ul id="suggestions" class="list-group mt-2"></ul>
         </div>
 
-        <!-- Mappa che mostra la posizione selezionata -->
-        <div id="map" style="height: 400px; width: 100%;" class="mb-3"></div>
-
         <div class="mb-3">
             <label for="description" class="form-label">Descrizione</label>
-            <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description">{{ old('description') }}</textarea>
+            <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description">{{ old('description', $stage->description) }}</textarea>
             @error('description')
                 <div class="invalid-feedback">
                     {{ $message }}
@@ -55,25 +53,17 @@
             @enderror
         </div>
 
-        <button type="submit" class="btn btn-primary">Salva Tappa</button>
+        <button type="submit" class="btn btn-primary">Aggiorna Tappa</button>
     </form>
 </div>
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const locationInput = document.getElementById('location');
     const latitudeInput = document.getElementById('latitude');
     const longitudeInput = document.getElementById('longitude');
     const suggestionsList = document.getElementById('suggestions');
-    const map = L.map('map').setView([51.505, -0.09], 13); // Valori iniziali (posizione centrata)
-    let marker = null; // Per salvare il marker
     const apiKey = '{{ $apiKey }}'; // Usa la chiave API passata dal controller
-
-    // Aggiunge le piastrelle di OpenStreetMap alla mappa
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(map);
 
     locationInput.addEventListener('input', function() {
         const location = locationInput.value;
@@ -94,19 +84,6 @@ document.addEventListener('DOMContentLoaded', function() {
                                 locationInput.value = result.formatted;
                                 latitudeInput.value = result.geometry.lat;
                                 longitudeInput.value = result.geometry.lng;
-
-                                // Sposta la mappa sulla posizione selezionata
-                                const latLng = [result.geometry.lat, result.geometry.lng];
-                                map.setView(latLng, 13);
-
-                                // Se esiste già un marker, rimuovilo
-                                if (marker) {
-                                    map.removeLayer(marker);
-                                }
-
-                                // Aggiungi un nuovo marker
-                                marker = L.marker(latLng).addTo(map);
-
                                 suggestionsList.innerHTML = '';
                             });
                             suggestionsList.appendChild(listItem);
