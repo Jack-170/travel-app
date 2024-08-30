@@ -1,21 +1,25 @@
-<x-guest-layout>
-    <div class="container mt-5">
+@extends('layouts.main')
+
+@section('title', 'Registrazione')
+
+@section('content')
+    <div class="container my-3">
         <div class="row justify-content-center">
             <div class="col-md-6 col-lg-5">
                 <div class="card shadow-sm">
                     <div class="card-body p-4">
-                        <h3 class="text-center mb-4">{{ __('Register') }}</h3>
+                        <h3 class="text-center custom-main-color mb-4">{{ __('Registrati') }}</h3>
                         <form method="POST" action="{{ route('register') }}">
                             @csrf
 
-                            <!-- Name -->
+                            <!-- Nome -->
                             <div class="mb-3">
-                                <x-input-label for="name" :value="__('Name')" />
+                                <x-input-label for="name" :value="__('Nome')" />
                                 <x-text-input id="name" class="form-control" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
                                 <x-input-error :messages="$errors->get('name')" class="mt-2 text-danger" />
                             </div>
 
-                            <!-- Email Address -->
+                            <!-- Indirizzo Email -->
                             <div class="mb-3">
                                 <x-input-label for="email" :value="__('Email')" />
                                 <x-text-input id="email" class="form-control" type="email" name="email" :value="old('email')" required autocomplete="username" />
@@ -29,20 +33,20 @@
                                 <x-input-error :messages="$errors->get('password')" class="mt-2 text-danger" />
                             </div>
 
-                            <!-- Confirm Password -->
+                            <!-- Conferma Password -->
                             <div class="mb-3">
-                                <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
+                                <x-input-label for="password_confirmation" :value="__('Conferma Password')" />
                                 <x-text-input id="password_confirmation" class="form-control" type="password" name="password_confirmation" required autocomplete="new-password" />
                                 <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2 text-danger" />
                             </div>
 
                             <div class="d-flex justify-content-between align-items-center mt-4">
                                 <a class="text-sm text-secondary" href="{{ route('login') }}">
-                                    {{ __('Already registered?') }}
+                                    {{ __('Sei già registrato?') }}
                                 </a>
 
                                 <x-primary-button class="custom-main-color btn">
-                                    {{ __('Register') }}
+                                    {{ __('Registrati') }}
                                 </x-primary-button>
                             </div>
                         </form>
@@ -51,4 +55,4 @@
             </div>
         </div>
     </div>
-</x-guest-layout>
+@endsection

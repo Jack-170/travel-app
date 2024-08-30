@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    <h1 class="mb-4">Modifica Tappa</h1>
+    <h1 class="mb-4 custom-main-color fw-semibold">Modifica Tappa</h1>
 
     <form method="POST" action="{{ route('stages.update', $stage->id) }}" enctype="multipart/form-data">
         @csrf
@@ -13,7 +13,7 @@
         <input type="hidden" id="longitude" name="longitude" value="{{ old('longitude', $stage->longitude) }}">
 
         <div class="mb-3">
-            <label for="title" class="form-label">Titolo</label>
+            <label for="title" class="form-label fw-semibold custom-main-color">Titolo</label>
             <input type="text" class="form-control @error('title') is-invalid @enderror" id="title" name="title" value="{{ old('title', $stage->title) }}" required>
             @error('title')
                 <div class="invalid-feedback">
@@ -23,7 +23,7 @@
         </div>
 
         <div class="mb-3">
-            <label for="location" class="form-label">Localizzazione</label>
+            <label for="location" class="form-label fw-semibold custom-main-color">Localizzazione</label>
             <input type="text" class="form-control @error('location') is-invalid @enderror" id="location" name="location" value="{{ old('location', $stage->location) }}" required autocomplete="off">
             @error('location')
                 <div class="invalid-feedback">
@@ -37,7 +37,7 @@
         <div id="map" style="height: 400px; width: 100%;" class="mb-3"></div>
 
         <div class="mb-3">
-            <label for="description" class="form-label">Descrizione</label>
+            <label for="description" class="form-label fw-semibold custom-main-color">Descrizione</label>
             <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description">{{ old('description', $stage->description) }}</textarea>
             @error('description')
                 <div class="invalid-feedback">
@@ -47,7 +47,7 @@
         </div>
 
         <div class="mb-3">
-            <label for="image" class="form-label">Immagine</label>
+            <label for="image" class="form-label fw-semibold custom-main-color">Immagine</label>
             <!-- Visualizzazione dell'immagine corrente -->
             @if($stage->image)
                 <div class="mb-3">
@@ -62,7 +62,7 @@
             @enderror
         </div>
 
-        <button type="submit" class="btn btn-primary">Aggiorna Tappa</button>
+        <button type="submit" class="btn custom-main-color">Aggiorna Tappa</button>
     </form>
 </div>
 

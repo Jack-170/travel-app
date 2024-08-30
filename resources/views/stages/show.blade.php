@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    <h1 class="custom-main-color mx-2">{{ $stage->title }}</h1>
+    <h1 class="custom-main-color my-2">{{ $stage->title }}</h1>
 
     @if($stage->image)
         <div class="card mb-4" style="width: 18rem;">
@@ -25,7 +25,7 @@
 
     <!-- Pulsanti di navigazione -->
     <a href="{{ route('days.show', $stage->day_id) }}" class="btn custom-main-color">Torna al giorno</a>
-    <a href="{{ route('trips.show', $stage->day->trip_id) }}" class="btn custom-main-color">Torna al viaggio</a>
+    <a href="{{ route('trips.show', ['trip' => $stage->day->trip_id, 'title' => Str::slug($stage->day->trip->title)]) }}" class="btn custom-main-color">Torna al viaggio</a>
     <a href="{{ route('stages.edit', $stage->id) }}" class="btn custom-main-color">Modifica Tappa</a>
 
     <form action="{{ route('stages.destroy', $stage->id) }}" method="POST" class="mt-2 d-inline">

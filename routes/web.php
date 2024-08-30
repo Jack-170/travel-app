@@ -6,6 +6,8 @@ use App\Http\Controllers\DayController;
 use App\Http\Controllers\StageController;
 use Illuminate\Support\Facades\Route;
 
+
+
 // Pagina home
 Route::get('/', function () {
     return view('home');
@@ -23,7 +25,11 @@ Route::middleware('auth')->group(function () {
     Route::post('/trips', [TripController::class, 'store'])->name('trips.store');
 
     // Visualizzare un singolo trip (show)
-    Route::get('/trips/{trip}', [TripController::class, 'show'])->name('trips.show');
+
+    Route::get('/trips/{trip}/{title}', [TripController::class, 'show'])->name('trips.show');
+
+
+
 
     // Visualizzare il form di modifica di un trip esistente (edit)
     Route::get('/trip/{trip}/edit', [TripController::class, 'edit'])->name('trips.edit');
@@ -47,6 +53,9 @@ Route::middleware('auth')->group(function () {
         Route::delete('/{stage}', [StageController::class, 'destroy'])->name('stages.destroy');
     });
 });
+
+Route::patch('/stages/{stage}/complete', [StageController::class, 'updateCompletion'])->name('stages.updateCompletion');
+
 
 // Pagina dashboard
 Route::get('/dashboard', function () {

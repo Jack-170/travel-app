@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('location'); // Localizzazione del palcoscenico
             $table->text('description')->nullable(); // Descrizione, può essere nulla
             $table->string('image')->nullable(); // Immagine, può essere nulla
+            $table->boolean('completed')->default(false);
             $table->unsignedBigInteger('day_id')->nullable(); // Colonna day_id con chiave esterna, può essere nulla
             $table->timestamps(); // Colonne created_at e updated_at
 

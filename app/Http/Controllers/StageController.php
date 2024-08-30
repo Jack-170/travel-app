@@ -97,4 +97,12 @@ class StageController extends Controller
 
         return redirect()->route('days.show', $dayId)->with('success', 'Tappa eliminata con successo!');
     }
+    public function updateCompletion(Request $request, Stage $stage)
+    {
+        $stage->completed = $request->has('completed');
+        $stage->save();
+
+        return redirect()->back();
+    }
+
 }

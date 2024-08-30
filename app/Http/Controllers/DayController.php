@@ -15,6 +15,8 @@ class DayController extends Controller
     {
         $day = Day::findOrFail($id);
         $day->load('stages');
-        return view('days.show', compact('day'));
+        $trip = $day->trip;
+        return view('days.show', compact('day', 'trip'));
     }
 }
+

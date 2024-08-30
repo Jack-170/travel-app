@@ -1,13 +1,17 @@
-<x-guest-layout>
+@extends('layouts.main')
+
+@section('title', 'Accesso')
+
+@section('content')
     <!-- Stato della sessione -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
-    <div class="container mt-5">
+    <div class="container my-3">
         <div class="row justify-content-center">
             <div class="col-md-6 col-lg-4">
                 <div class="card shadow-sm border-light">
                     <div class="card-body p-4">
-                        <h2 class="card-title mb-4 text-center">Accesso</h2>
+                        <h2 class="card-title mb-4 custom-main-color text-center">Accesso</h2>
 
                         <form method="POST" action="{{ route('login') }}">
                             @csrf
@@ -44,7 +48,7 @@
                                     </a>
                                 @endif
 
-                                <a href="{{ route('register') }}" class="btn custom-main-color  btn-lg w-75">
+                                <a href="{{ route('register') }}" class="btn custom-main-color btn-lg w-75">
                                     {{ __('Registrati') }}
                                 </a>
                             </div>
@@ -54,4 +58,4 @@
             </div>
         </div>
     </div>
-</x-guest-layout>
+@endsection

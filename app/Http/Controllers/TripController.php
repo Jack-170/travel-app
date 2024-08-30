@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Models\Day;
 use App\Models\Trip;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use Illuminate\Support\Str;
 
 class TripController extends Controller
 {
@@ -16,7 +16,9 @@ class TripController extends Controller
      */
     public function index()
     {
-        $trips = Trip::all();
+        $userId = auth()->id(); // Ottieni l'ID dell'utente loggato
+        $trips = Trip::where('user_id', $userId)->get(); // Filtra i viaggi per l'utente loggato
+
         return view('trips.index', compact('trips'));
     }
 
@@ -35,35 +37,32 @@ class TripController extends Controller
     {
         $form_data = $request->all();
 
-        $val_data = $request->validate(
-            [
-                'title' => 'required|min:3|max:100',
-                'destination' => 'required|min:3|max:100',
-                'leaving' => ['required', function ($attribute, $value, $fail) {
-                    if (strtotime($value) < strtotime(date('Y-m-d'))) {
-                        $fail('La data di partenza deve essere uguale o successiva alla data odierna.');
-                    }
-                }],
-                'return' => ['required', function ($attribute, $value, $fail) use ($request) {
-                    if (strtotime($value) < strtotime($request->leaving)) {
-                        $fail('La data di ritorno deve essere uguale o successiva alla data di partenza.');
-                    }
-                }],
-            ],
-            [
-                'title.required' => 'Il campo Titolo è obbligatorio',
-                'title.min' => 'Il campo Titolo deve contenere almeno :min caratteri',
-                'title.max' => 'Il campo Titolo non può contenere più di :max caratteri',
-                'destination.required' => 'Il campo Destinazione è obbligatorio',
-                'destination.min' => 'Il campo Destinazione deve contenere almeno :min caratteri',
-                'destination.max' => 'Il campo Destinazione non può contenere più di :max caratteri',
-                'leaving.required' => 'Il campo Partenza è obbligatorio',
-                'return.required' => 'Il campo Ritorno è obbligatorio'
-            ]
-        );
+        $request->validate([
+            'title' => 'required|min:3|max:100',
+            'destination' => 'required|min:3|max:100',
+            'leaving' => ['required', function ($attribute, $value, $fail) {
+                if (strtotime($value) < strtotime(date('Y-m-d'))) {
+                    $fail('La data di partenza deve essere uguale o successiva alla data odierna.');
+                }
+            }],
+            'return' => ['required', function ($attribute, $value, $fail) use ($request) {
+                if (strtotime($value) < strtotime($request->leaving)) {
+                    $fail('La data di ritorno deve essere uguale o successiva alla data di partenza.');
+                }
+            }],
+        ], [
+            'title.required' => 'Il campo Titolo è obbligatorio',
+            'title.min' => 'Il campo Titolo deve contenere almeno :min caratteri',
+            'title.max' => 'Il campo Titolo non può contenere più di :max caratteri',
+            'destination.required' => 'Il campo Destinazione è obbligatorio',
+            'destination.min' => 'Il campo Destinazione deve contenere almeno :min caratteri',
+            'destination.max' => 'Il campo Destinazione non può contenere più di :max caratteri',
+            'leaving.required' => 'Il campo Partenza è obbligatorio',
+            'return.required' => 'Il campo Ritorno è obbligatorio'
+        ]);
 
         // Creazione dello slug (puoi implementare una funzione simile nel tuo Helper)
-        $form_data['slug'] = \Str::slug($form_data['title']);
+        $form_data['slug'] = Str::slug($form_data['title']);
 
         // Creazione del nuovo viaggio (trip)
         $newTrip = new Trip();
@@ -91,23 +90,37 @@ class TripController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
-{
-    $trip = Trip::findOrFail($id);
-    $trip->load(['days' => function ($query) {
-        $query->orderBy('date'); // Ordina i giorni per data
-    }]);
+    public function show(string $id, string $title)
+    {
+        $trip = Trip::findOrFail($id);
 
-    return view('trips.show', compact('trip'));
-}
+        // Verifica che l'utente loggato sia il proprietario del viaggio
+        if ($trip->user_id !== auth()->id()) {
+            abort(403, 'Non sei autorizzato a visualizzare questo viaggio.');
+        }
 
+        // Verifica che il titolo slug sia corretto
+        if (Str::slug($trip->title) !== $title) {
+            abort(404);
+        }
 
+        $trip->load(['days' => function ($query) {
+            $query->orderBy('date');
+        }]);
+
+        return view('trips.show', compact('trip'));
+    }
 
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(Trip $trip)
     {
+        // Verifica che l'utente loggato sia il proprietario del viaggio
+        if ($trip->user_id !== auth()->id()) {
+            abort(403, 'Non sei autorizzato a modificare questo viaggio.');
+        }
+
         return view('trips.edit', compact('trip'));
     }
 
@@ -116,37 +129,39 @@ class TripController extends Controller
      */
     public function update(Request $request, Trip $trip)
     {
+        // Verifica che l'utente loggato sia il proprietario del viaggio
+        if ($trip->user_id !== auth()->id()) {
+            abort(403, 'Non sei autorizzato ad aggiornare questo viaggio.');
+        }
+
         $form_data = $request->all();
 
-        $val_data = $request->validate(
-            [
-                'title' => 'required|min:3|max:100',
-                'destination' => 'required|min:3|max:100',
-                'leaving' => ['required', function ($attribute, $value, $fail) {
-                    if (strtotime($value) < strtotime(date('Y-m-d'))) {
-                        $fail('La data di partenza deve essere uguale o successiva alla data odierna.');
-                    }
-                }],
-                'return' => ['required', function ($attribute, $value, $fail) use ($request) {
-                    if (strtotime($value) < strtotime($request->leaving)) {
-                        $fail('La data di ritorno deve essere uguale o successiva alla data di partenza.');
-                    }
-                }],
-            ],
-            [
-                'title.required' => 'Il campo Titolo è obbligatorio',
-                'title.min' => 'Il campo Titolo deve contenere almeno :min caratteri',
-                'title.max' => 'Il campo Titolo non può contenere più di :max caratteri',
-                'destination.required' => 'Il campo Destinazione è obbligatorio',
-                'destination.min' => 'Il campo Destinazione deve contenere almeno :min caratteri',
-                'destination.max' => 'Il campo Destinazione non può contenere più di :max caratteri',
-                'leaving.required' => 'Il campo Partenza è obbligatorio',
-                'return.required' => 'Il campo Ritorno è obbligatorio'
-            ]
-        );
+        $request->validate([
+            'title' => 'required|min:3|max:100',
+            'destination' => 'required|min:3|max:100',
+            'leaving' => ['required', function ($attribute, $value, $fail) {
+                if (strtotime($value) < strtotime(date('Y-m-d'))) {
+                    $fail('La data di partenza deve essere uguale o successiva alla data odierna.');
+                }
+            }],
+            'return' => ['required', function ($attribute, $value, $fail) use ($request) {
+                if (strtotime($value) < strtotime($request->leaving)) {
+                    $fail('La data di ritorno deve essere uguale o successiva alla data di partenza.');
+                }
+            }],
+        ], [
+            'title.required' => 'Il campo Titolo è obbligatorio',
+            'title.min' => 'Il campo Titolo deve contenere almeno :min caratteri',
+            'title.max' => 'Il campo Titolo non può contenere più di :max caratteri',
+            'destination.required' => 'Il campo Destinazione è obbligatorio',
+            'destination.min' => 'Il campo Destinazione deve contenere almeno :min caratteri',
+            'destination.max' => 'Il campo Destinazione non può contenere più di :max caratteri',
+            'leaving.required' => 'Il campo Partenza è obbligatorio',
+            'return.required' => 'Il campo Ritorno è obbligatorio'
+        ]);
 
         if ($form_data['title'] !== $trip->title) {
-            $form_data['slug'] = \Str::slug($form_data['title']);
+            $form_data['slug'] = Str::slug($form_data['title']);
         }
 
         $trip->update($form_data);
@@ -189,6 +204,11 @@ class TripController extends Controller
      */
     public function destroy(Trip $trip)
     {
+        // Verifica che l'utente loggato sia il proprietario del viaggio
+        if ($trip->user_id !== auth()->id()) {
+            abort(403, 'Non sei autorizzato ad eliminare questo viaggio.');
+        }
+
         $days = Day::where('trip_id', $trip->id)->get();
 
         foreach ($days as $day) {
