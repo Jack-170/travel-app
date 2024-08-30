@@ -17,37 +17,40 @@ class StageController extends Controller
     }
 
     // Metodo per salvare una nuova tappa
-    public function store(Request $request)
-{
-    $validated = $request->validate([
-        'title' => 'required|min:3|max:100',
-        'location' => 'required|string',
-        'latitude' => 'required|numeric',
-        'longitude' => 'required|numeric',
-        'description' => 'nullable|string',
-        'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-        'day_id' => 'required|exists:days,id',
-    ]);
+        public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'title' => 'required|min:3|max:100',
+            'location' => 'required|string',
+            'latitude' => 'required|numeric',
+            'longitude' => 'required|numeric',
+            'description' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'day_id' => 'required|exists:days,id',
+        ]);
 
-    $validated['location'] = "{$validated['location']}|{$validated['latitude']}|{$validated['longitude']}";
+        $validated['location'] = "{$validated['location']}|{$validated['latitude']}|{$validated['longitude']}";
 
-    if ($request->hasFile('image')) {
-        // Memorizza l'immagine e ottieni il percorso relativo
-        $validated['image'] = $request->file('image')->store('stages', 'public');
+        if ($request->hasFile('image')) {
+            // Memorizza l'immagine e ottieni il percorso relativo
+            $validated['image'] = $request->file('image')->store('stages', 'public');
+        }
+
+        $validated['slug'] = Str::slug($validated['title']);
+
+        Stage::create($validated);
+
+        return redirect()->route('days.show', $validated['day_id'])->with('success', 'Tappa creata con successo!');
     }
-
-    $validated['slug'] = Str::slug($validated['title']);
-
-    Stage::create($validated);
-
-    return redirect()->route('days.show', $validated['day_id'])->with('success', 'Tappa creata con successo!');
-}
 
 
     // Metodo per visualizzare i dettagli di una tappa
-    public function show(Stage $stage)
+    public function show($id)
     {
-        return view('stages.show', compact('stage'));
+        $stage = Stage::findOrFail($id);
+        $apiKey = config('services.opencage.key'); // Supponendo che la tua chiave API sia salvata nei file di configurazione
+
+        return view('stages.show', compact('stage', 'apiKey'));
     }
 
     // Metodo per visualizzare il modulo di modifica

@@ -33,6 +33,9 @@
             <ul id="suggestions" class="list-group mt-2"></ul>
         </div>
 
+        <!-- Mappa che mostra la posizione selezionata -->
+        <div id="map" style="height: 400px; width: 100%;" class="mb-3"></div>
+
         <div class="mb-3">
             <label for="description" class="form-label">Descrizione</label>
             <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description">{{ old('description', $stage->description) }}</textarea>
@@ -45,6 +48,12 @@
 
         <div class="mb-3">
             <label for="image" class="form-label">Immagine</label>
+            <!-- Visualizzazione dell'immagine corrente -->
+            @if($stage->image)
+                <div class="mb-3">
+                    <img src="{{ asset('storage/' . $stage->image) }}" alt="Immagine attuale" class="img-thumbnail" style="max-width: 300px;">
+                </div>
+            @endif
             <input type="file" class="form-control @error('image') is-invalid @enderror" id="image" name="image">
             @error('image')
                 <div class="invalid-feedback">
@@ -57,13 +66,26 @@
     </form>
 </div>
 
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const locationInput = document.getElementById('location');
     const latitudeInput = document.getElementById('latitude');
     const longitudeInput = document.getElementById('longitude');
     const suggestionsList = document.getElementById('suggestions');
+    const map = L.map('map').setView([{{ old('latitude', $stage->latitude) ?? 51.505 }}, {{ old('longitude', $stage->longitude) ?? -0.09 }}], 13); // Valori iniziali dalle coordinate esistenti o di default
+    let marker = null; // Per salvare il marker
     const apiKey = '{{ $apiKey }}'; // Usa la chiave API passata dal controller
+
+    // Aggiunge le piastrelle di OpenStreetMap alla mappa
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    // Aggiungi un marker sulla posizione esistente, se disponibile
+    if (latitudeInput.value && longitudeInput.value) {
+        marker = L.marker([latitudeInput.value, longitudeInput.value]).addTo(map);
+    }
 
     locationInput.addEventListener('input', function() {
         const location = locationInput.value;
@@ -84,6 +106,19 @@ document.addEventListener('DOMContentLoaded', function() {
                                 locationInput.value = result.formatted;
                                 latitudeInput.value = result.geometry.lat;
                                 longitudeInput.value = result.geometry.lng;
+
+                                // Sposta la mappa sulla posizione selezionata
+                                const latLng = [result.geometry.lat, result.geometry.lng];
+                                map.setView(latLng, 13);
+
+                                // Se esiste già un marker, rimuovilo
+                                if (marker) {
+                                    map.removeLayer(marker);
+                                }
+
+                                // Aggiungi un nuovo marker
+                                marker = L.marker(latLng).addTo(map);
+
                                 suggestionsList.innerHTML = '';
                             });
                             suggestionsList.appendChild(listItem);

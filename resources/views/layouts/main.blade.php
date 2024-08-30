@@ -31,6 +31,10 @@
             justify-content: center;
             align-items: center;
         }
+        /* Stile per posizionare il bottone del profilo in fondo a destra */
+        .navbar-nav.ms-auto {
+            margin-left: auto;
+        }
     </style>
 </head>
 <body>
@@ -39,6 +43,9 @@
             <h1 class="custom-main-color text-center fs-1 mb-4">Travel-App</h1>
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
                 <div class="container">
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
                     <div class="collapse navbar-collapse" id="navbarNav">
                         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                             <li class="nav-item">
@@ -50,6 +57,8 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('trips.create') }}">Create Trip</a>
                             </li>
+                        </ul>
+                        <ul class="navbar-nav ms-auto"> <!-- Sposta il profilo a destra -->
                             @guest
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
@@ -62,7 +71,7 @@
                                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                         {{ Auth::user()->name }}
                                     </a>
-                                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                         <li><a class="dropdown-item" href="{{ route('profile.edit') }}">{{ __('Profile') }}</a></li>
                                         <li>
                                             <form method="POST" action="{{ route('logout') }}">
