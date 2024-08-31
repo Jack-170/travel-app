@@ -3,8 +3,6 @@
 @section('content')
 <h2 class="custom-main-color my-2">I Tuoi Viaggi</h2>
 
-<!-- Link per creare un nuovo viaggio -->
-{{-- <a href="{{ route('trips.create') }}" class="btn custom-main-color mt-2">Crea Nuovo Viaggio</a> --}}
 
 <!-- Visualizza un elenco di viaggi -->
 <div class="mt-4">
@@ -32,10 +30,10 @@
                             <!-- Pulsanti Visualizza, Modifica ed Elimina -->
                             <a href="{{ route('trips.show', ['trip' => $trip->id, 'title' => Str::slug($trip->title)]) }}" class="btn custom-main-color btn-sm">Visualizza</a>
                             <a href="{{ route('trips.edit', $trip) }}" class="btn custom-main-color btn-sm">Modifica</a>
-                            <form action="{{ route('trips.destroy', $trip) }}" method="POST" style="display:inline;">
+                            <form action="{{ route('trips.destroy', $trip) }}" method="POST" style="display:inline;" id="delete-form-{{ $trip->id }}">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn custom-main-color btn-sm">Elimina</button>
+                                <button type="button" class="btn btn-danger btn-sm" onclick="confirmDelete({{ $trip->id }})">Elimina</button>
                             </form>
                         </td>
                     </tr>
@@ -44,4 +42,25 @@
         </table>
     @endif
 </div>
+
+<!-- SweetAlert2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+function confirmDelete(tripId) {
+    Swal.fire({
+        title: 'Sei sicuro di voler eliminare questo viaggio?',
+        text: "Non potrai recuperarlo dopo l'eliminazione.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: 'rgb(64, 189, 252)',
+        confirmButtonText: 'Sì, elimina!',
+        cancelButtonText: 'Annulla'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            document.getElementById('delete-form-' + tripId).submit();
+        }
+    });
+}
+</script>
 @endsection

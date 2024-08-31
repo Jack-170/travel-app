@@ -55,7 +55,7 @@
             @enderror
         </div>
 
-        <button type="submit" class="btn btn-primary">Salva Tappa</button>
+        <button type="submit" class="btn custom-main-color">Salva Tappa</button>
     </form>
 </div>
 
@@ -68,9 +68,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const suggestionsList = document.getElementById('suggestions');
     const map = L.map('map').setView([51.505, -0.09], 13); // Valori iniziali (posizione centrata)
     let marker = null; // Per salvare il marker
-    const apiKey = '{{ $apiKey }}'; // Usa la chiave API passata dal controller
+    const apiKey = '{{ $apiKey }}'; //chiave API passata dal controller
 
-    // Aggiunge le piastrelle di OpenStreetMap alla mappa
+
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', function() {
     locationInput.addEventListener('input', function() {
         const location = locationInput.value;
 
-        if (location.length > 2) { // Start searching after 3 characters
+        if (location.length > 2) {
             fetch(`https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(location)}&key=${apiKey}`)
                 .then(response => response.json())
                 .then(data => {
@@ -95,16 +95,16 @@ document.addEventListener('DOMContentLoaded', function() {
                                 latitudeInput.value = result.geometry.lat;
                                 longitudeInput.value = result.geometry.lng;
 
-                                // Sposta la mappa sulla posizione selezionata
+
                                 const latLng = [result.geometry.lat, result.geometry.lng];
                                 map.setView(latLng, 13);
 
-                                // Se esiste già un marker, rimuovilo
+
                                 if (marker) {
                                     map.removeLayer(marker);
                                 }
 
-                                // Aggiungi un nuovo marker
+
                                 marker = L.marker(latLng).addTo(map);
 
                                 suggestionsList.innerHTML = '';

@@ -12,21 +12,20 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('stages', function (Blueprint $table) {
-            $table->id(); // Colonna auto-incrementante per l'ID
-            $table->string('title'); // Titolo del palcoscenico
-            $table->string('slug'); // Slug per URL o identificativo unico
-            $table->string('location'); // Localizzazione del palcoscenico
-            $table->text('description')->nullable(); // Descrizione, può essere nulla
-            $table->string('image')->nullable(); // Immagine, può essere nulla
+            $table->id();
+            $table->string('title');
+            $table->string('slug');
+            $table->string('location');
+            $table->text('description')->nullable();
+            $table->string('image')->nullable();
             $table->boolean('completed')->default(false);
-            $table->unsignedBigInteger('day_id')->nullable(); // Colonna day_id con chiave esterna, può essere nulla
-            $table->timestamps(); // Colonne created_at e updated_at
+            $table->unsignedBigInteger('day_id')->nullable();
+            $table->timestamps();
 
-            // Definizione del vincolo di chiave esterna
             $table->foreign('day_id')
                 ->references('id')
                 ->on('days')
-                ->nullOnDelete(); // Imposta a null il valore di day_id se il record associato viene eliminato
+                ->nullOnDelete();
         });
     }
 
@@ -36,11 +35,9 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('stages', function (Blueprint $table) {
-            // Rimozione del vincolo di chiave esterna
             $table->dropForeign(['day_id']);
         });
 
-        // Eliminazione della tabella stages
         Schema::dropIfExists('stages');
     }
 };

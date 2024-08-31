@@ -12,16 +12,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('days', function (Blueprint $table) {
-            $table->id(); // Colonna auto-incrementante per l'ID
-            $table->date('date'); // Data del giorno
-            $table->unsignedBigInteger('trip_id')->nullable(); // Colonna jurney_id con chiave esterna, può essere null
-            $table->timestamps(); // Colonne created_at e updated_at
+            $table->id();
+            $table->date('date');
+            $table->unsignedBigInteger('trip_id')->nullable();
+            $table->timestamps();
 
-            // Definizione del vincolo di chiave esterna
+
             $table->foreign('trip_id')
                 ->references('id')
-                ->on('trips') // Modifica questo se il nome della tabella è diverso (es. trips)
-                ->nullOnDelete(); // Imposta a null il valore di jurney_id se il record associato viene eliminato
+                ->on('trips')
+                ->nullOnDelete();
         });
     }
 
@@ -31,11 +31,11 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('days', function (Blueprint $table) {
-            // Rimozione del vincolo di chiave esterna
+
             $table->dropForeign(['trip_id']);
         });
 
-        // Eliminazione della tabella days
+
         Schema::dropIfExists('days');
     }
 };

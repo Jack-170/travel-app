@@ -7,7 +7,7 @@
 
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
 
     <!-- Include CSS and JS -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -21,11 +21,11 @@
         }
         .custom-header {
             background-color: #f8f9fa;
-            padding: 20px;
+            padding:5px;
         }
         .custom-footer {
             background-color: #f8f9fa;
-            padding: 10px;
+            padding: 5px;
         }
         .content-wrapper {
             flex: 1;
@@ -42,7 +42,7 @@
 <body>
     <header class="custom-header">
         <div class="container">
-            <h1 class="custom-main-color text-center fs-1 mb-4">Travel-App</h1>
+            <h1 class="custom-main-color text-center fs-1 my-2">Travel-App</h1>
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
                 <div class="container">
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -60,7 +60,7 @@
                                 <a class="nav-link fw-semibold custom-main-color" href="{{ route('trips.create') }}">Nuovo viaggio</a>
                             </li>
                         </ul>
-                        <ul class="navbar-nav ms-auto"> <!-- Sposta il profilo a destra -->
+                        <ul class="navbar-nav ms-auto">
                             @guest
                                 <li class="nav-item">
                                     <a class="nav-link fw-semibold custom-main-color" href="{{ route('login') }}">{{ __('Accedi') }}</a>
@@ -105,9 +105,10 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-    <script src="{{ mix('js/app.js') }}"></script>
 
-    <!-- Sezione per gli script specifici delle viste -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
     @yield('scripts')
 
 </body>

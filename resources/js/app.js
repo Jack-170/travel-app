@@ -12,7 +12,8 @@ function updateUrl(newUrl) {
 document.querySelectorAll('.navigate-button').forEach(button => {
     button.addEventListener('click', function() {
         updateUrl();
-        // Carica il contenuto dinamico per la nuova sezione via AJAX
         loadContent();
     });
 });
+
+

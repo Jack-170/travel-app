@@ -13,7 +13,7 @@
         </div>
     </div>
 
-    <!-- Dettaglio della data del giorno -->
+
     <p><strong>Data:</strong> {{ $day->date }}</p>
 
     <h2 class="custom-main-color">Tappe</h2>
@@ -47,7 +47,7 @@
 
                     <!-- Pulsante accanto alla tappa -->
                     <div>
-                        <!-- Esempio di pulsante, potresti cambiare l'azione -->
+
                         <a href="{{ route('stages.show', $stage->id) }}" class="btn custom-main-color btn-sm">Dettagli</a>
                     </div>
                 </li>

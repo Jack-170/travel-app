@@ -8,7 +8,7 @@
             @csrf
             @method('PUT')
 
-            <!-- Title -->
+            <!-- Form Titolo -->
             <div class="mb-3">
                 <label for="title" class="form-label custom-main-color">Titolo</label>
                 <input type="text" class="form-control @error('title') is-invalid @enderror" id="title" name="title" value="{{ old('title', $trip->title) }}" required>
@@ -19,7 +19,7 @@
                 @enderror
             </div>
 
-            <!-- Destination -->
+            <!-- Form destinazione -->
             <div class="mb-3">
                 <label for="destination" class="form-label  custom-main-color">Destinazione</label>
                 <input type="text" class="form-control @error('destination') is-invalid @enderror" id="destination" name="destination" value="{{ old('destination', $trip->destination) }}" required>
@@ -30,7 +30,7 @@
                 @enderror
             </div>
 
-            <!-- Leaving Date -->
+            <!-- Form data partenza -->
             <div class="mb-3">
                 <label for="leaving" class="form-label custom-main-color">Data di Partenza</label>
                 <input type="date" class="form-control @error('leaving') is-invalid @enderror" id="leaving" name="leaving" value="{{ old('leaving', $trip->leaving) }}" required>
@@ -41,7 +41,7 @@
                 @enderror
             </div>
 
-            <!-- Return Date -->
+            <!-- Form data ritorno -->
             <div class="mb-3">
                 <label for="return" class="form-label custom-main-color">Data di Ritorno</label>
                 <input type="date" class="form-control @error('return') is-invalid @enderror" id="return" name="return" value="{{ old('return', $trip->return) }}" required>

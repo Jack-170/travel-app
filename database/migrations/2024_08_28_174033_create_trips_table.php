@@ -12,20 +12,20 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('trips', function (Blueprint $table) {
-            $table->id(); // Colonna auto-incrementante per l'ID
-            $table->string('title'); // Titolo del viaggio
-            $table->string('slug'); // Slug per URL o identificativo unico
-            $table->string('destination'); // Destinazione del viaggio
-            $table->date('leaving'); // Data di partenza
-            $table->date('return'); // Data di ritorno
-            $table->unsignedBigInteger('user_id')->nullable(); // Colonna user_id con chiave esterna, può essere null
-            $table->timestamps(); // Colonne created_at e updated_at
+            $table->id();
+            $table->string('title');
+            $table->string('slug');
+            $table->string('destination');
+            $table->date('leaving');
+            $table->date('return');
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->timestamps();
 
-            // Definizione del vincolo di chiave esterna
+
             $table->foreign('user_id')
                 ->references('id')
                 ->on('users')
-                ->nullOnDelete(); // Imposta a null il valore di user_id se il record dell'utente viene eliminato
+                ->nullOnDelete();
         });
     }
 

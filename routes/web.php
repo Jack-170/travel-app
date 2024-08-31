@@ -28,9 +28,6 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/trips/{trip}/{title}', [TripController::class, 'show'])->name('trips.show');
 
-
-
-
     // Visualizzare il form di modifica di un trip esistente (edit)
     Route::get('/trip/{trip}/edit', [TripController::class, 'edit'])->name('trips.edit');
 
