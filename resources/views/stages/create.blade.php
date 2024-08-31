@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    <h1 class="mb-4">Aggiungi Nuova Tappa</h1>
+    <h1 class="mb-4 fw-semibold custom-main-color">Aggiungi Nuova Tappa</h1>
 
     <form method="POST" action="{{ route('stages.store') }}" enctype="multipart/form-data">
         @csrf

@@ -4,7 +4,7 @@
 <div class="container">
     <div class="row align-items-center">
         <!-- Titolo del giorno -->
-        <div class="col-md-9">
+        <div class="col-md-9 my-2">
             <h1 class="custom-main-color">Dettagli del giorno:</h1>
         </div>
         <!-- Pulsante per aggiungere una tappa -->
